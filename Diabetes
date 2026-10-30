@@ -3,5 +3,21 @@
 <head>
   <title> Type 1 Diabetes Genes</title>
 </head>
+<body>
   <h1>Genes Associated with Type 1 Diabetes</h1>
   <p> Some geens are associated with T1D risk.</p>
+
+  <script>
+        let genes = ["INS", "PTPN22", "CTLA4"];
+
+        for (let gene of genes) {
+            if (gene === "INS") {
+                document.write("<p>" + gene + ": Insulin gene</p>");
+            } else {
+                document.write("<p>" + gene + ": T1D-associated gene</p>");
+            }
+        }
+  </script>
+
+</body>
+</html>
