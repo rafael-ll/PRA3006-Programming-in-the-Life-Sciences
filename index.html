@@ -16,14 +16,20 @@
     <div id="gene-list"></div>
 
     <script>
-        // SPARQL query
+        // SPARQL QUERY
+        // "DISTINCT" removes duplicate combinations of the selected values
+        // WHERE specifies relation: T1D (Q124407) -> association (p2293) -> to gene variable
+        // Which proteins are encoded by the genes: ?gene -> encodes (wdt:P688) -> ?protein.
+        // linking to the bio processes: protein -> linked biological process (wdt:P682)
+        // retrieving actual processes names -> rdfs:label in english (FILTER(LANG()="en"))
+        // SUBQUERY: SELECT the same bioprocesses, GROUP them by process, and retains only the processes related to 2 or more genes. 
         let query = `
     SELECT DISTINCT ?gene ?geneLabel ?process ?processLabel
     WHERE {
         wd:Q124407 wdt:P2293 ?gene.
 
         ?gene wdt:P688 ?protein.
-        ?protein wdt:P682 ?process.
+        ?protein wdt:P682 ?process. 
 
         ?gene rdfs:label ?geneLabel.
         ?process rdfs:label ?processLabel.
