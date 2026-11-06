@@ -64,10 +64,9 @@
 
                     let paragraph = document.createElement("p");
 
-                    paragraph.textContent = item.processLabel.value
+                    paragraph.textContent = item.geneLabel.value
                         + " → "
-                        + item.geneCount.value
-                        + " genes";
+                        + item.processLabel.value;
 
                     document.getElementById("gene-list").appendChild(paragraph);
                 }
