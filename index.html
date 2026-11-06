@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <meta charset="UTF-8">
     <title>Type 1 Diabetes Genes</title>
 </head>
 
@@ -9,41 +11,48 @@
 
     <p>Some genes are associated with T1D risk.</p>
 
+    <h2>Genes associated with Type 1 Diabetes</h2>
+
     <div id="gene-list"></div>
 
     <script>
+        // SPARQL query
         let query = `
-            SELECT ?gene ?geneLabel
+            SELECT DISTINCT ?gene ?geneLabel
             WHERE {
-                ?gene wdt:P703 wd:Q15978631.
+                wd:Q124407 wdt:P2293 ?gene.
                 ?gene rdfs:label ?geneLabel.
                 FILTER(LANG(?geneLabel) = "en")
             }
-            LIMIT 10
+            LIMIT 100
         `;
 
+        // Wikidata URL
         let url = "https://query.wikidata.org/sparql?query="
                   + encodeURIComponent(query)
                   + "&format=json";
 
+        // Request data from Wikidata
         fetch(url)
             .then(response => response.json())
             .then(data => {
+
+                // Step 4: Extract the results
                 let results = data.results.bindings;
 
+                // Step 5: Display each gene on the webpage
                 for (let item of results) {
+
                     let paragraph = document.createElement("p");
+
                     paragraph.textContent = item.geneLabel.value;
+
                     document.getElementById("gene-list").appendChild(paragraph);
                 }
             })
             .catch(error => console.error("Error:", error));
-    </script>
 
-</body>
-</html>
-});
-  </script>
+    </script>
 
 </body>
 </html>
