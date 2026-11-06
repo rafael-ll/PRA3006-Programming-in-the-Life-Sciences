@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title> Type 1 Diabetes Genes</title>
+    <title>Type 1 Diabetes Genes</title>
 </head>
+
 <body>
-  <h1>How are genes associated with Type 1 Diabetes connected in their biological functions? </h1>
-  <p> Some genes are associated with T1D risk.</p>
+    <h1>How are genes associated with Type 1 Diabetes connected in their biological functions?</h1>
 
-  <div id="gene-list"></div>
-  <script>
-    //SPARQL query
-  let query = `
-    SELECT ?gene ?geneLabel
-    WHERE {
-      ?gene wdt:P703 wd:Q15978631.
-      ?gene rdfs:label ?geneLabel.
-      FILTER(LANG(?geneLabel) = "en")
-    }
-    LIMIT 10
-  `;
+    <p>Some genes are associated with T1D risk.</p>
 
-  let url = "https://query.wikidata.org/sparql?query="
-            + encodeURIComponent(query)
-            + "&format=json";
+    <div id="gene-list"></div>
 
-   //retrieve from Wikidata 
-  fetch(url)
-    .then(response => response.json())
-    .then(data => {
-    let results = data.results.bindings;
+    <script>
+        let query = `
+            SELECT ?gene ?geneLabel
+            WHERE {
+                ?gene wdt:P703 wd:Q15978631.
+                ?gene rdfs:label ?geneLabel.
+                FILTER(LANG(?geneLabel) = "en")
+            }
+            LIMIT 10
+        `;
 
-    for (let item of results) {
-        let paragraph = document.createElement("p");
-        paragraph.textContent = item.geneLabel.value;
-        document.getElementById("gene-list").appendChild(paragraph);
-    }
+        let url = "https://query.wikidata.org/sparql?query="
+                  + encodeURIComponent(query)
+                  + "&format=json";
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                let results = data.results.bindings;
+
+                for (let item of results) {
+                    let paragraph = document.createElement("p");
+                    paragraph.textContent = item.geneLabel.value;
+                    document.getElementById("gene-list").appendChild(paragraph);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+    </script>
+
+</body>
+</html>
 });
   </script>
 
