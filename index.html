@@ -9,9 +9,9 @@
 <body>
     <h1>How are genes associated with Type 1 Diabetes connected in their biological functions?</h1>
 
-    <p>Some genes are associated with T1D risk.</p>
+    <p>Some genes are associated with an increased risk of T1D. Associating these genes by their biological functions may reveal fucntional relationships.</p>
 
-    <h2>Genes associated with Type 1 Diabetes</h2>
+    <h2>Shared biological processes of T1D-associated genes:</h2>
 
     <div id="gene-list"></div>
 
@@ -22,8 +22,10 @@
         // Which proteins are encoded by the genes: ?gene -> encodes (wdt:P688) -> ?protein.
         // linking to the bio processes: protein -> linked biological process (wdt:P682)
         // retrieving actual processes names -> rdfs:label in english (FILTER(LANG()="en"))
-        // SUBQUERY: SELECT the same bioprocesses, GROUP them by process, and retains only the processes related to 2 or more genes.
-        // ORDER BY orders the array alphabetically
+        // SUBQUERY: SELECT the same bioprocesses, 
+            // GROUP them by process,
+            // retains only the processes related with >=2 or more t1d-related genes.
+        // ORDER BY sorts the query results alphabetically by process and then gene
         let query = `
     SELECT DISTINCT ?gene ?geneLabel ?process ?processLabel
     WHERE {
@@ -53,10 +55,10 @@
     LIMIT 1000
 `;
 
-        // Create a variable called url with the query and makes it readable as URL in JSON format
+        // Create a variable called url, encode the query so its it readable as URL, and request results in JSON format
         let url = "https://query.wikidata.org/sparql?query=" + encodeURIComponent(query) + "&format=json";
 
-        // Fetch data from Wikidata and build a response in JSON format
+        // Requests data from Wikidata and convert the JSON response into Javascript object
         fetch(url)
             .then(response => response.json())
             .then(data => {
