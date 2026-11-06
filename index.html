@@ -18,20 +18,32 @@
     <script>
         // SPARQL query
         let query = `
-    SELECT ?processLabel (COUNT(DISTINCT ?gene) AS ?geneCount)
+    SELECT DISTINCT ?gene ?geneLabel ?process ?processLabel
     WHERE {
         wd:Q124407 wdt:P2293 ?gene.
 
         ?gene wdt:P688 ?protein.
         ?protein wdt:P682 ?process.
 
+        ?gene rdfs:label ?geneLabel.
         ?process rdfs:label ?processLabel.
+
+        FILTER(LANG(?geneLabel) = "en")
         FILTER(LANG(?processLabel) = "en")
+
+        {
+            SELECT ?process
+            WHERE {
+                wd:Q124407 wdt:P2293 ?associatedGene.
+                ?associatedGene wdt:P688 ?associatedProtein.
+                ?associatedProtein wdt:P682 ?process.
+            }
+            GROUP BY ?process
+            HAVING (COUNT(DISTINCT ?associatedGene) >= 2)
+        }
     }
-    GROUP BY ?process ?processLabel
-    HAVING (COUNT(DISTINCT ?gene) >= 2)
-    ORDER BY DESC(?geneCount)
-    LIMIT 50
+    ORDER BY ?processLabel ?geneLabel
+    LIMIT 1000
 `;
 
         // Wikidata URL
