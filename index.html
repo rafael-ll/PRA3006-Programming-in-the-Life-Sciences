@@ -7,7 +7,9 @@
   <h1>How are genes associated with Type 1 Diabetes connected in their biological functions? </h1>
   <p> Some genes are associated with T1D risk.</p>
 
+  <div id="gene-list"></div>
   <script>
+    //SPARQL query
   let query = `
     SELECT ?gene ?geneLabel
     WHERE {
@@ -22,9 +24,18 @@
             + encodeURIComponent(query)
             + "&format=json";
 
+   //retrieve from Wikidata 
   fetch(url)
     .then(response => response.json())
-    .then(data => console.log(data));
+    .then(data => {
+    let results = data.results.bindings;
+
+    for (let item of results) {
+        let paragraph = document.createElement("p");
+        paragraph.textContent = item.geneLabel.value;
+        document.getElementById("gene-list").appendChild(paragraph);
+    }
+});
   </script>
 
 </body>
