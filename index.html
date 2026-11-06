@@ -18,14 +18,21 @@
     <script>
         // SPARQL query
         let query = `
-            SELECT DISTINCT ?gene ?geneLabel
-            WHERE {
-                wd:Q124407 wdt:P2293 ?gene.
-                ?gene rdfs:label ?geneLabel.
-                FILTER(LANG(?geneLabel) = "en")
-            }
-            LIMIT 100
-        `;
+    SELECT DISTINCT ?geneLabel ?processLabel
+    WHERE {
+        wd:Q124407 wdt:P2293 ?gene.
+
+        ?gene wdt:P688 ?protein.
+        ?protein wdt:P682 ?process.
+
+        ?gene rdfs:label ?geneLabel.
+        ?process rdfs:label ?processLabel.
+
+        FILTER(LANG(?geneLabel) = "en")
+        FILTER(LANG(?processLabel) = "en")
+    }
+    LIMIT 100
+`;
 
         // Wikidata URL
         let url = "https://query.wikidata.org/sparql?query="
@@ -45,7 +52,9 @@
 
                     let paragraph = document.createElement("p");
 
-                    paragraph.textContent = item.geneLabel.value;
+                    paragraph.textContent = item.geneLabel.value
+                        + " → "
+                        + item.processLabel.value;
 
                     document.getElementById("gene-list").appendChild(paragraph);
                 }
