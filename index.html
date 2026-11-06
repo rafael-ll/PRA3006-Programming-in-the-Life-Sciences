@@ -22,7 +22,8 @@
         // Which proteins are encoded by the genes: ?gene -> encodes (wdt:P688) -> ?protein.
         // linking to the bio processes: protein -> linked biological process (wdt:P682)
         // retrieving actual processes names -> rdfs:label in english (FILTER(LANG()="en"))
-        // SUBQUERY: SELECT the same bioprocesses, GROUP them by process, and retains only the processes related to 2 or more genes. 
+        // SUBQUERY: SELECT the same bioprocesses, GROUP them by process, and retains only the processes related to 2 or more genes.
+        // ORDER BY orders the array alphabetically
         let query = `
     SELECT DISTINCT ?gene ?geneLabel ?process ?processLabel
     WHERE {
@@ -52,32 +53,28 @@
     LIMIT 1000
 `;
 
-        // Wikidata URL
-        let url = "https://query.wikidata.org/sparql?query="
-                  + encodeURIComponent(query)
-                  + "&format=json";
+        // Create a variable called url with the query and makes it readable as URL in JSON format
+        let url = "https://query.wikidata.org/sparql?query=" + encodeURIComponent(query) + "&format=json";
 
-        // Request data from Wikidata
+        // Fetch data from Wikidata and build a response in JSON format
         fetch(url)
             .then(response => response.json())
             .then(data => {
 
-                // Extract the results
+                // Access the array and stores it in "results"
                 let results = data.results.bindings;
 
-                // Display each gene on the webpage
+                // Display each gene as a paragraph (p) with an arrow next to the gene with a loop
                 for (let item of results) {
-
                     let paragraph = document.createElement("p");
 
                     paragraph.textContent = item.geneLabel.value
-                        + " → "
+                        + " -> "
                         + item.processLabel.value;
 
                     document.getElementById("gene-list").appendChild(paragraph);
                 }
-            })
-            .catch(error => console.error("Error:", error));
+            });
 
     </script>
 
