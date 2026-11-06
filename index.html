@@ -37,10 +37,10 @@
             .then(response => response.json())
             .then(data => {
 
-                // Step 4: Extract the results
+                // Extract the results
                 let results = data.results.bindings;
 
-                // Step 5: Display each gene on the webpage
+                // Display each gene on the webpage
                 for (let item of results) {
 
                     let paragraph = document.createElement("p");
