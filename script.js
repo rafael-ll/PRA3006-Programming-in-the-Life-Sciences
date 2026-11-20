@@ -64,8 +64,9 @@ fetch("query.rq")
         // Create an SVG inside the network div
         let svg = d3.select("#network")
             .append("svg")
-            .attr("width", width)
-            .attr("height", height);
+            .attr("viewBox", `0 0 ${width} ${height}`)
+            .attr("width", "100%")
+            .attr("height", "auto");
 
         // Draw links between genes and processes
         let link = svg.selectAll("line")
@@ -98,10 +99,10 @@ fetch("query.rq")
         // Update positions as the simulation runs
   simulation.on("tick", () => {
 
-    // Keep nodes inside the SVG boundaries
+    // Keep nodes inside the SVG
     for (let d of nodes) {
-        d.x = Math.max(15, Math.min(width - 15, d.x));
-        d.y = Math.max(15, Math.min(height - 15, d.y));
+        d.x = Math.max(20, Math.min(width - 20, d.x));
+        d.y = Math.max(20, Math.min(height - 20, d.y));
     }
 
     // Update link positions
