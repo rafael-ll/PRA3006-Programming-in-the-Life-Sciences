@@ -52,7 +52,7 @@ fetch("query.rq")
                 target: "process:" + item.process.value
             });
         }
-
+        // THE FOLLOWING PART IS FOR D3 VISUALIZATION
         // Display network information in the console
         console.log("Total nodes:", nodes.length);
         console.log("Total links:", links.length);
