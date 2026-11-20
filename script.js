@@ -96,15 +96,24 @@ fetch("query.rq")
             .force("center", d3.forceCenter(width / 2, height / 2));
 
         // Update positions as the simulation runs
-        simulation.on("tick", () => {
-            link
-                .attr("x1", d => d.source.x)
-                .attr("y1", d => d.source.y)
-                .attr("x2", d => d.target.x)
-                .attr("y2", d => d.target.y);
+  simulation.on("tick", () => {
 
-            node
-                .attr("cx", d => d.x)
-                .attr("cy", d => d.y);
-        });
+    // Keep nodes inside the SVG boundaries
+    for (let d of nodes) {
+        d.x = Math.max(15, Math.min(width - 15, d.x));
+        d.y = Math.max(15, Math.min(height - 15, d.y));
+    }
+
+    // Update link positions
+    link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+    // Update node positions
+    node
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y);
+});
     });
