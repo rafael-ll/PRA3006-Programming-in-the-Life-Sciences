@@ -58,8 +58,8 @@ fetch("query.rq")
         console.log("Total links:", links.length);
 
         // Set visualization dimensions
-        let width = 900;
-        let height = 600;
+        let width = 1000;
+        let height = 750;
 
         // Create an SVG inside the network div
         let svg = d3.select("#network")
